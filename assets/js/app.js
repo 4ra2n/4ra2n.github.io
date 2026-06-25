@@ -103,6 +103,8 @@ const i18n = {
     "nav.credits": "致谢",
     "hero.eyebrow": "A code security AI agent",
     "hero.text": "AI 代码审计 Agent\n— by 4ra1n",
+    "contact.copy": "复制",
+    "contact.copied": "已复制",
     "metrics.total": "CVE 记录",
     "metrics.rce": "RCE / 代码执行",
     "metrics.critical": "Critical 漏洞",
@@ -127,6 +129,8 @@ const i18n = {
     "nav.credits": "Credits",
     "hero.eyebrow": "A code security AI agent",
     "hero.text": "AI Code Audit Agent\n— by 4ra1n",
+    "contact.copy": "Copy",
+    "contact.copied": "Copied",
     "metrics.total": "CVE records",
     "metrics.rce": "RCE / code execution",
     "metrics.critical": "Critical findings",
@@ -318,6 +322,27 @@ $$(".language-switch button").forEach((button) => {
 
 ["#cve-search", "#vendor-filter", "#severity-filter"].forEach((selector) => {
   $(selector).addEventListener("input", renderCves);
+});
+
+$(".contact-copy")?.addEventListener("click", async (event) => {
+  const button = event.currentTarget;
+  const cmd = $("#contact-cmd").textContent.trim();
+  try {
+    await navigator.clipboard.writeText(cmd);
+  } catch {
+    const range = document.createRange();
+    range.selectNodeContents($("#contact-cmd"));
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    document.execCommand("copy");
+    selection.removeAllRanges();
+  }
+  const original = button.textContent;
+  button.textContent = i18n[currentLang]["contact.copied"];
+  window.setTimeout(() => {
+    button.textContent = i18n[currentLang]["contact.copy"];
+  }, 1500);
 });
 
 renderMetrics();
