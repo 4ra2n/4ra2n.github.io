@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="4ra2n — A code security AI agent. High-value CVE research and advisory credits."
+    />
+    <title>4ra2n — A code security AI agent</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <canvas id="grid-bg" aria-hidden="true"></canvas>
+    <div class="scanline" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="4ra2n">
+        <span class="brand-mark">4R</span>
+        <span>
+          <span class="brand-name">4ra2n</span>
+          <span class="brand-subtitle">code security AI agent</span>
+        </span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#cves" data-i18n="nav.cves">CVE</a>
+        <a href="#credits" data-i18n="nav.credits">致谢</a>
+      </nav>
+
+      <div class="language-switch" aria-label="Language switcher">
+        <button class="active" type="button" data-lang="zh">中</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero section-band" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow" data-i18n="hero.eyebrow">A code security AI agent</p>
+          <h1 id="hero-title">4ra<span class="hero-accent">2</span>n</h1>
+          <p class="hero-text" data-i18n="hero.text">
+            AI 代码审计 Agent<br />— by 4ra1n
+          </p>
+        </div>
+      </section>
+
+      <section class="metrics section-band" aria-label="Research metrics">
+        <div class="metric">
+          <span id="metric-total">0</span>
+          <p data-i18n="metrics.total">CVE 记录</p>
+        </div>
+        <div class="metric">
+          <span id="metric-rce">0</span>
+          <p data-i18n="metrics.rce">RCE / 代码执行</p>
+        </div>
+        <div class="metric">
+          <span id="metric-critical">0</span>
+          <p data-i18n="metrics.critical">Critical 漏洞</p>
+        </div>
+      </section>
+
+      <section id="cves" class="cves section-band" aria-labelledby="cves-title">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="cves.eyebrow">Exploit Intelligence</p>
+          <h2 id="cves-title" data-i18n="cves.title">CVE</h2>
+        </div>
+
+        <div class="controls" aria-label="CVE filters">
+          <label class="search-box" for="cve-search">
+            <span data-i18n="cves.search">搜索</span>
+            <input id="cve-search" type="search" autocomplete="off" placeholder="CVE / Vendor / Product" />
+          </label>
+          <label for="vendor-filter">
+            <span data-i18n="cves.vendor">厂商</span>
+            <select id="vendor-filter"></select>
+          </label>
+          <label for="severity-filter">
+            <span data-i18n="cves.severity">级别</span>
+            <select id="severity-filter"></select>
+          </label>
+        </div>
+
+        <div class="table-shell">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="table.vendor">Vendor</th>
+                <th data-i18n="table.product">Product</th>
+                <th data-i18n="table.cve">CVE-ID</th>
+                <th data-i18n="table.type">Type</th>
+                <th data-i18n="table.cvss">CVSS</th>
+              </tr>
+            </thead>
+            <tbody id="cve-table"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="credits" class="credits section-band" aria-labelledby="credits-title">
+        <div class="section-heading compact">
+          <p class="eyebrow" data-i18n="credits.eyebrow">Advisory Credits</p>
+          <h2 id="credits-title" data-i18n="credits.title">安全公告致谢</h2>
+        </div>
+        <div class="credit-grid" id="credit-grid"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>4ra1n / 4ra2n</p>
+      <a href="#top" data-i18n="footer.back">返回顶部</a>
+    </footer>
+
+    <script src="assets/js/app.js" defer></script>
+  </body>
+</html>
