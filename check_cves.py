@@ -57,6 +57,42 @@ def norm(s):
     return re.sub(r"\s+", " ", s.strip())
 
 
+def parse_readme_credits():
+    text = README.read_text(encoding="utf-8")
+    rows = []
+    in_credits = False
+    for line in text.splitlines():
+        s = line.strip()
+        if s.startswith("## 致谢"):
+            in_credits = True
+            continue
+        if in_credits:
+            if s.startswith("## "):
+                break
+            m = re.match(r"^-\s*\[([^\]]+)\]\(([^)]+)\)", s)
+            if m:
+                title, url = m.group(1).strip(), m.group(2).strip()
+                rows.append((title, url))
+    return rows
+
+
+def parse_app_js_credits():
+    text = APP_JS.read_text(encoding="utf-8")
+    m = re.search(r"const credits = \[(.*?)\]\s*\.map", text, re.DOTALL)
+    if not m:
+        raise RuntimeError("无法在 app.js 中定位 credits 数组")
+    body = m.group(1)
+    rows = []
+    for row_match in re.finditer(r"\[([^\]]+)\]", body):
+        raw = row_match.group(1)
+        fields = re.findall(r'"((?:[^"\\]|\\.)*)"', raw)
+        if len(fields) < 7:
+            continue
+        zh, en, url = fields[2].strip(), fields[3].strip(), fields[6].strip()
+        rows.append((zh, en, url))
+    return rows
+
+
 def main():
     if not README.exists():
         print(f"错误: 找不到 {README}")
@@ -104,8 +140,38 @@ def main():
         diffs.append("CVE 顺序与 README 不一致（详见上方各行 CVE-ID 比对）")
 
     print("-" * 60)
+
+    readme_credits = parse_readme_credits()
+    js_credits = parse_app_js_credits()
+
+    print(f"README  致谢条目数: {len(readme_credits)}")
+    print(f"app.js  致谢条目数: {len(js_credits)}")
+    print("-" * 60)
+
+    if len(readme_credits) != len(js_credits):
+        diffs.append(f"致谢数量不一致: README={len(readme_credits)} app.js={len(js_credits)}")
+
+    n = max(len(readme_credits), len(js_credits))
+    for i in range(n):
+        r = readme_credits[i] if i < len(readme_credits) else None
+        j = js_credits[i] if i < len(js_credits) else None
+        if r is None:
+            diffs.append(f"致谢第 {i+1} 条: app.js 多出 {j[0]}")
+            continue
+        if j is None:
+            diffs.append(f"致谢第 {i+1} 条: README 多出 {r[0]}")
+            continue
+        if r[1] != j[2]:
+            diffs.append(f"致谢第 {i+1} 条 {r[0]} URL 不一致:\n    README={r[1]}\n    app.js={j[2]}")
+
+    readme_credit_urls = [r[1] for r in readme_credits]
+    js_credit_urls = [j[2] for j in js_credits]
+    if readme_credit_urls != js_credit_urls:
+        diffs.append("致谢顺序与 README 不一致（详见上方各条 URL 比对）")
+
+    print("-" * 60)
     if not diffs:
-        print("✅ 完全匹配: app.js 的 CVE 列表与 README 表格一致（顺序、字段、URL 全部核对通过）")
+        print("✅ 完全匹配: CVE 列表与致谢信息均与 README 一致（顺序、字段、URL 全部核对通过）")
         return 0
     else:
         print(f"❌ 发现 {len(diffs)} 处差异:")

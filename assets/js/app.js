@@ -81,8 +81,7 @@ const credits = [
   ["Oracle", "2023-10", "Oracle 深度安全贡献者", "Oracle Security-In-Depth Contributors", "2023年10月", "Oct 2023", "https://www.oracle.com/security-alerts/cpuoct2023.html"],
   ["Oracle", "2026-01", "Oracle 深度安全贡献者", "Oracle Security-In-Depth Contributors", "2026年01月", "Jan 2026", "https://www.oracle.com/security-alerts/cpujan2026.html"],
 ]
-  .map(([vendor, date, zh, en, dateZh, dateEn, url]) => ({ vendor, date, zh, en, dateZh, dateEn, url }))
-  .sort((a, b) => b.date.localeCompare(a.date));
+  .map(([vendor, date, zh, en, dateZh, dateEn, url]) => ({ vendor, date, zh, en, dateZh, dateEn, url }));
 
 const typeMap = {
   RCE: "RCE",
