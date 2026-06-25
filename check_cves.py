@@ -7,7 +7,6 @@ ROOT = Path(__file__).resolve().parent
 README = ROOT / "README.md"
 APP_JS = ROOT / "assets" / "js" / "app.js"
 
-
 def parse_readme():
     text = README.read_text(encoding="utf-8")
     rows = []
